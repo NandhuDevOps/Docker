@@ -1,0 +1,32 @@
+Vi Dockerfile:
+
+FROM centos:7
+
+LABEL maintainer=Nandhini
+LABEL vendor=A2ZCS
+LABEL Env=Dev
+
+ENV  WEB carvilla.zip
+ARG user=doc
+
+WORKDIR /var/www/html
+
+RUN yum install httpd unzip wget -y
+
+COPY $WEB .
+
+RUN unzip $WEB && mv ./carvilla-v1.0/* .
+
+RUN rm -rf $WEB carvilla-v1.0
+
+RUN useradd $user && chown $user:$user -R .
+
+USER root
+
+CMD apachectl -DFOREGROUND
+---------To copy into new file
+COPY 1.sh /.
+
+RUN chmod +x /1.sh
+
+CMD /1.sh
